@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>FWI Prediction | Forest Fire Intelligence</title>
+
+
+<!-- Bootstrap -->
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+
+<!-- Google Font -->
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+
+<style>
+
+    /* =====================================================
+       GLOBAL
+    ===================================================== */
+
+    * {
+        box-sizing: border-box;
+    }
+
+
+    body {
+
+        margin: 0;
+
+        font-family: 'Inter', sans-serif;
+
+        min-height: 100vh;
+
+        background:
+
+            radial-gradient(
+                circle at 10% 10%,
+                rgba(255, 100, 40, 0.14),
+                transparent 30%
+            ),
+
+            radial-gradient(
+                circle at 90% 90%,
+                rgba(30, 120, 255, 0.14),
+                transparent 30%
+            ),
+
+            #080f1d;
+
+        color: white;
+    }
+
+
+    /* =====================================================
+       NAVBAR
+    ===================================================== */
+
+    .navbar-custom {
+
+        padding: 22px 7%;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+    }
+
+
+    .brand {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        font-size: 20px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.5px;
+    }
+
+
+    .brand-icon {
+
+        width: 44px;
+
+        height: 44px;
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+
+        border-radius: 13px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ff512f,
+                #f09819
+            );
+
+        box-shadow:
+            0 8px 30px
+            rgba(255, 90, 40, 0.35);
+
+        transition:
+            all 0.35s ease;
+    }
+
+
+    .brand-icon:hover {
+
+        transform:
+            rotate(-8deg)
+            scale(1.12);
+
+        box-shadow:
+            0 12px 35px
+            rgba(255, 90, 40, 0.55);
+    }
+
+
+    .status {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        padding: 9px 15px;
+
+        border-radius: 30px;
+
+        background:
+            rgba(255,255,255,0.05);
+
+        border:
+            1px solid
+            rgba(255,255,255,0.1);
+
+        color: #aab5c7;
+
+        font-size: 12px;
+
+        transition:
+            all 0.3s ease;
+    }
+
+
+    .status:hover {
+
+        background:
+            rgba(255,255,255,0.1);
+
+        transform:
+            translateY(-2px);
+
+        border-color:
+            rgba(34,197,94,0.4);
+    }
+
+
+    .status-dot {
+
+        width: 8px;
+
+        height: 8px;
+
+        border-radius: 50%;
+
+        background: #22c55e;
+
+        box-shadow:
+            0 0 10px #22c55e;
+
+        animation:
+            pulse 2s infinite;
+    }
+
+
+    @keyframes pulse {
+
+        0% {
+            box-shadow:
+                0 0 0 0
+                rgba(34,197,94,0.6);
+        }
+
+        70% {
+            box-shadow:
+                0 0 0 8px
+                rgba(34,197,94,0);
+        }
+
+        100% {
+            box-shadow:
+                0 0 0 0
+                rgba(34,197,94,0);
+        }
+
+    }
+
+
+    /* =====================================================
+       MAIN
+    ===================================================== */
+
+    .main-wrapper {
+
+        max-width: 1200px;
+
+        margin:
+            20px auto 60px;
+
+        padding:
+            0 20px;
+    }
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .hero {
+
+        text-align: center;
+
+        margin-bottom: 40px;
+    }
+
+
+    .hero-badge {
+
+        display: inline-block;
+
+        padding:
+            8px 15px;
+
+        border-radius: 30px;
+
+        background:
+            rgba(255,107,53,0.1);
+
+        border:
+            1px solid
+            rgba(255,107,53,0.25);
+
+        color: #ff9f1c;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        letter-spacing: 1px;
+
+        text-transform: uppercase;
+
+        transition:
+            all 0.3s ease;
+    }
+
+
+    .hero-badge:hover {
+
+        background:
+            rgba(255,107,53,0.2);
+
+        transform:
+            scale(1.05);
+
+        box-shadow:
+            0 5px 25px
+            rgba(255,107,53,0.2);
+    }
+
+
+    .hero h1 {
+
+        margin-top: 16px;
+
+        font-size:
+            clamp(32px, 5vw, 52px);
+
+        font-weight: 800;
+
+        letter-spacing: -2px;
+    }
+
+
+    .hero h1 span {
+
+        background:
+            linear-gradient(
+                90deg,
+                #ff512f,
+                #f09819
+            );
+
+        -webkit-background-clip: text;
+
+        -webkit-text-fill-color:
+            transparent;
+    }
+
+
+    .hero p {
+
+        max-width: 680px;
+
+        margin: auto;
+
+        color: #8996aa;
+
+        font-size: 14px;
+
+        line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       DASHBOARD
+    ===================================================== */
+
+    .dashboard {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1.5fr;
+
+        gap: 25px;
+    }
+
+
+    .info-panel,
+    .form-panel {
+
+        background:
+            rgba(255,255,255,0.055);
+
+        border:
+            1px solid
+            rgba(255,255,255,0.1);
+
+        backdrop-filter:
+            blur(20px);
+
+        -webkit-backdrop-filter:
+            blur(20px);
+
+        border-radius: 24px;
+
+        padding: 30px;
+
+        box-shadow:
+            0 25px 70px
+            rgba(0,0,0,0.25);
+
+        transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+    }
+
+
+    .info-panel:hover,
+    .form-panel:hover {
+
+        transform:
+            translateY(-5px);
+
+        border-color:
+            rgba(255,255,255,0.18);
+
+        box-shadow:
+            0 30px 80px
+            rgba(0,0,0,0.4);
+    }
+
+
+    /* =====================================================
+       INFORMATION PANEL
+    ===================================================== */
+
+    .fire-icon {
+
+        font-size: 55px;
+
+        display: inline-block;
+
+        transition:
+            all 0.35s ease;
+    }
+
+
+    .fire-icon:hover {
+
+        transform:
+            scale(1.2)
+            rotate(8deg);
+
+        filter:
+            drop-shadow(
+                0 0 15px
+                rgba(255,100,30,0.7)
+            );
+    }
+
+
+    .info-panel h2 {
+
+        font-size: 24px;
+
+        font-weight: 800;
+
+        margin-top: 15px;
+
+        margin-bottom: 12px;
+    }
+
+
+    .info-panel > p {
+
+        color: #8d99ad;
+
+        font-size: 13px;
+
+        line-height: 1.8;
+    }
+
+
+    .section-title {
+
+        color: #ff9f1c;
+
+        font-size: 10px;
+
+        font-weight: 800;
+
+        letter-spacing: 1.2px;
+
+        text-transform: uppercase;
+
+        margin:
+            25px 0 15px;
+    }
+
+
+    .feature {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 13px;
+
+        padding:
+            13px 10px;
+
+        border-radius: 12px;
+
+        border-bottom:
+            1px solid
+            rgba(255,255,255,0.06);
+
+        transition:
+            all 0.3s ease;
+    }
+
+
+    .feature:hover {
+
+        background:
+            rgba(255,255,255,0.06);
+
+        transform:
+            translateX(7px);
+
+        border-color:
+            rgba(255,159,28,0.3);
+    }
+
+
+    .feature-icon {
+
+        width: 38px;
+
+        height: 38px;
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+
+        border-radius: 10px;
+
+        background:
+            rgba(255,255,255,0.07);
+
+        transition:
+            all 0.3s ease;
+    }
+
+
+    .feature:hover .feature-icon {
+
+        transform:
+            scale(1.1);
+
+        background:
+            rgba(255,159,28,0.15);
+    }
+
+
+    .feature-text strong {
+
+        display: block;
+
+        font-size: 12px;
+    }
+
+
+    .feature-text span {
+
+        color: #7f8ba0;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       FORM
+    ===================================================== */
+
+    .form-header {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        margin-bottom: 25px;
+    }
+
+
+    .form-header h2 {
+
+        margin: 0;
+
+        font-size: 21px;
+
+        font-weight: 750;
+    }
+
+
+    .form-header span {
+
+        font-size: 10px;
+
+        color: #8d99ad;
+
+        background:
+            rgba(255,255,255,0.06);
+
+        padding:
+            6px 10px;
+
+        border-radius: 8px;
+    }
+
+
+    .two-column {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 15px;
+    }
+
+
+    .input-group-custom {
+
+        margin-bottom: 16px;
+    }
+
+
+    .form-label {
+
+        font-size: 11px;
+
+        font-weight: 600;
+
+        color: #cbd5e1;
+
+        margin-bottom: 7px;
+    }
+
+
+    /* =====================================================
+       INPUT
+    ===================================================== */
+
+    .form-control {
+
+        height: 48px;
+
+        border-radius: 12px;
+
+        border:
+            1px solid
+            rgba(255,255,255,0.1);
+
+        background:
+            rgba(0,0,0,0.2);
+
+        color: white;
+
+        padding:
+            0 14px;
+
+        font-size: 12px;
+
+        transition:
+            all 0.25s ease;
+    }
+
+
+    .form-control::placeholder {
+
+        color: #596579;
+    }
+
+
+    /* Hover */
+
+    .form-control:hover {
+
+        border-color:
+            rgba(255,159,28,0.45);
+
+        background:
+            rgba(255,255,255,0.045);
+
+        transform:
+            translateY(-1px);
+
+        box-shadow:
+            0 5px 18px
+            rgba(0,0,0,0.15);
+    }
+
+
+    /* Focus */
+
+    .form-control:focus {
+
+        background:
+            rgba(0,0,0,0.3);
+
+        color: white;
+
+        border-color:
+            #ff7a45;
+
+        outline: none;
+
+        box-shadow:
+
+            0 0 0 3px
+            rgba(255,107,53,0.12),
+
+            0 8px 25px
+            rgba(0,0,0,0.2);
+
+        transform:
+            translateY(-2px);
+    }
+
+
+    /* Valid */
+
+    .form-control:valid:not(:placeholder-shown) {
+
+        border-color:
+            rgba(34,197,94,0.45);
+    }
+
+
+    /* Invalid */
+
+    .form-control:invalid:not(:placeholder-shown) {
+
+        border-color:
+            rgba(239,68,68,0.65);
+    }
+
+
+    /* =====================================================
+       SELECT
+    ===================================================== */
+
+    select.form-control {
+
+        cursor: pointer;
+    }
+
+
+    select.form-control option {
+
+        background:
+            #111827;
+
+        color:
+            white;
+    }
+
+
+    /* =====================================================
+       BUTTON
+    ===================================================== */
+
+    .predict-btn {
+
+        width: 100%;
+
+        height: 54px;
+
+        margin-top: 18px;
+
+        border: none;
+
+        border-radius: 13px;
+
+        color: white;
+
+        font-weight: 700;
+
+        font-size: 13px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ff512f,
+                #f09819
+            );
+
+        box-shadow:
+            0 12px 30px
+            rgba(255,107,53,0.25);
+
+        transition:
+            all 0.3s ease;
+
+        position: relative;
+
+        overflow: hidden;
+
+        cursor: pointer;
+    }
+
+
+    .predict-btn:hover {
+
+        transform:
+            translateY(-3px);
+
+        box-shadow:
+            0 18px 40px
+            rgba(255,107,53,0.4);
+
+        letter-spacing:
+            0.3px;
+    }
+
+
+    .predict-btn:active {
+
+        transform:
+            translateY(0)
+            scale(0.98);
+    }
+
+
+    .predict-btn::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+
+        left: -100%;
+
+        width: 100%;
+
+        height: 100%;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.25),
+                transparent
+            );
+
+        transition:
+            0.6s;
+    }
+
+
+    .predict-btn:hover::before {
+
+        left: 100%;
+    }
+
+
+    /* =====================================================
+       RESULT
+    ===================================================== */
+
+    .result {
+
+        margin-top: 25px;
+
+        padding: 25px;
+
+        border-radius: 17px;
+
+        text-align: center;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(34,197,94,0.12),
+                rgba(13,110,253,0.08)
+            );
+
+        border:
+            1px solid
+            rgba(34,197,94,0.2);
+
+        animation:
+            resultAppear 0.5s ease;
+
+        transition:
+            all 0.3s ease;
+    }
+
+
+    .result:hover {
+
+        transform:
+            translateY(-3px);
+
+        box-shadow:
+            0 15px 35px
+            rgba(34,197,94,0.12);
+    }
+
+
+    @keyframes resultAppear {
+
+        from {
+
+            opacity: 0;
+
+            transform:
+                translateY(15px);
+        }
+
+        to {
+
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+    }
+
+
+    .result-label {
+
+        color: #8d99ad;
+
+        font-size: 10px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+
+        font-weight: 700;
+    }
+
+
+    .result h3 {
+
+        margin:
+            8px 0 0;
+
+        font-size: 35px;
+
+        font-weight: 800;
+
+        background:
+            linear-gradient(
+                90deg,
+                #4ade80,
+                #60a5fa
+            );
+
+        -webkit-background-clip:
+            text;
+
+        -webkit-text-fill-color:
+            transparent;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .footer {
+
+        text-align: center;
+
+        margin-top: 30px;
+
+        color: #596579;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 900px) {
+
+        .dashboard {
+
+            grid-template-columns:
+                1fr;
+        }
+
+
+        .info-panel {
+
+            order: 2;
+        }
+
+
+        .form-panel {
+
+            order: 1;
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .navbar-custom {
+
+            padding:
+                18px 5%;
+        }
+
+
+        .status {
+
+            display: none;
+        }
+
+
+        .main-wrapper {
+
+            padding:
+                0 14px;
+        }
+
+
+        .info-panel,
+        .form-panel {
+
+            padding:
+                22px;
+        }
+
+
+        .two-column {
+
+            grid-template-columns:
+                1fr;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar-custom">
+
+```
+<div class="brand">
+
+    <div class="brand-icon">
+        🔥
+    </div>
+
+    <span>
+        FWI Intelligence
+    </span>
+
+</div>
+
+
+<div class="status">
+
+    <div class="status-dot"></div>
+
+    ML Model Online
+
+</div>
+```
+
+</nav>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<div class="main-wrapper">
+
+```
+<!-- HERO -->
+
+<div class="hero">
+
+
+    <div class="hero-badge">
+
+        Machine Learning Prediction
+
+    </div>
+
+
+    <h1>
+
+        Forest Fire
+        <span>
+            Risk Intelligence
+        </span>
+
+    </h1>
+
+
+    <p>
+
+        Predict the Fire Weather Index using environmental
+        and meteorological parameters powered by machine learning.
+
+    </p>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div class="dashboard">
+
+
+    <!-- =================================================
+         INFORMATION PANEL
+    ================================================= -->
+
+    <div class="info-panel">
+
+
+        <div class="fire-icon">
+            🔥
+        </div>
+
+
+        <h2>
+            Algerian Forest Fire
+        </h2>
+
+
+        <p>
+
+            Enter weather and fire-weather indicators
+            to estimate the Fire Weather Index.
+
+        </p>
+
+
+        <div class="section-title">
+
+            Model Parameters
+
+        </div>
+
+
+        <!-- Temperature -->
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🌡️
+            </div>
+
+            <div class="feature-text">
+
+                <strong>
+                    Temperature
+                </strong>
+
+                <span>
+                    0°C – 50°C
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Humidity -->
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                💧
+            </div>
+
+            <div class="feature-text">
+
+                <strong>
+                    Relative Humidity
+                </strong>
+
+                <span>
+                    0% – 100%
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Wind -->
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                💨
+            </div>
+
+            <div class="feature-text">
+
+                <strong>
+                    Wind Speed
+                </strong>
+
+                <span>
+                    0 – 100
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Rain -->
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🌧️
+            </div>
+
+            <div class="feature-text">
+
+                <strong>
+                    Rainfall
+                </strong>
+
+                <span>
+                    0 – 50
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Fire indicators -->
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <div class="feature-text">
+
+                <strong>
+                    Fire Weather Indicators
+                </strong>
+
+                <span>
+                    FFMC • DMC • ISI
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         FORM PANEL
+    ================================================= -->
+
+    <div class="form-panel">
+
+
+        <div class="form-header">
+
+            <h2>
+                Prediction Input
+            </h2>
+
+            <span>
+                9 PARAMETERS
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM
+        ================================================= -->
+
+        <form
+            action="{{ url_for('predict_datapoint') }}"
+            method="post"
+        >
+
+
+            <!-- WEATHER -->
+
+            <div class="section-title">
+
+                Weather Conditions
+
+            </div>
+
+
+            <div class="two-column">
+
+
+                <!-- Temperature -->
+
+                <div class="input-group-custom">
+
+                    <label
+                        for="Temperature"
+                        class="form-label"
+                    >
+
+                        Temperature (°C)
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="50"
+                        class="form-control"
+                        id="Temperature"
+                        name="Temperature"
+                        placeholder="0 – 50"
+                        title="Temperature must be between 0 and 50°C"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- RH -->
+
+                <div class="input-group-custom">
+
+                    <label
+                        for="RH"
+                        class="form-label"
+                    >
+
+                        Relative Humidity (%)
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        class="form-control"
+                        id="RH"
+                        name="RH"
+                        placeholder="0 – 100"
+                        title="Relative humidity must be between 0 and 100%"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- Wind Speed -->
+
+                <div class="input-group-custom">
+
+                    <label
+                        for="Ws"
+                        class="form-label"
+                    >
+
+                        Wind Speed (Ws)
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        class="form-control"
+                        id="Ws"
+                        name="Ws"
+                        placeholder="0 – 100"
+                        title="Wind speed must be between 0 and 100"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- Rain -->
+
+                <div class="input-group-custom">
+
+                    <label
+                        for="Rain"
+                        class="form-label"
+                    >
+
+                        Rain
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="50"
+                        class="form-control"
+                        id="Rain"
+                        name="Rain"
+                        placeholder="0 – 50"
+                        title="Rain must be between 0 and 50"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FIRE WEATHER INDICATORS
+            ================================================= -->
+
+            <div class="section-title">
+
+                Fire Weather Indicators
+
+            </div>
+
+
+            <div class="two-column">
+
+
+                <!-- FFMC -->
+
+                <div class="input-group-custom">
+
+                    <label
+                        for="FFMC"
+                        class="form-label"
+                    >
+
+                        FFMC
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="101"
+                        class="form-control"
+                        id="FFMC"
+                        name="FFMC"
+                        placeholder="0 – 101"
+                        title="FFMC must be between 0 and 101"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- DMC -->
+
+                <div class="input-group-custom">
+
+                    <label
+                        for="DMC"
+                        class="form-label"
+                    >
+
+                        DMC
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="300"
+                        class="form-control"
+                        id="DMC"
+                        name="DMC"
+                        placeholder="0 – 300"
+                        title="DMC must be between 0 and 300"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- ISI -->
+
+                <div class="input-group-custom">
+
+                    <label
+                        for="ISI"
+                        class="form-label"
+                    >
+
+                        ISI
+
+                    </label>
+
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="20"
+                        class="form-control"
+                        id="ISI"
+                        name="ISI"
+                        placeholder="0 – 20"
+                        title="ISI must be between 0 and 20"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CLASSIFICATION
+            ================================================= -->
+
+            <div class="section-title">
+
+                Classification Information
+
+            </div>
+
+
+            <div class="two-column">
+
+
+                <!-- ===============================
+                     CLASSES
+                =============================== -->
+
+                <div class="input-group-custom">
+
+
+                    <label
+                        for="Classes"
+                        class="form-label"
+                    >
+
+                        Fire Class
+
+                    </label>
+
+
+                    <select
+                        class="form-control"
+                        id="Classes"
+                        name="Classes"
+                        required
+                    >
+
+
+                        <option
+                            value=""
+                            disabled
+                            selected
+                        >
+
+                            Select fire class
+
+                        </option>
+
+
+                        <!-- NOT FIRE = 0 -->
+
+                        <option value="0">
+
+                            Not Fire
+
+                        </option>
+
+
+                        <!-- FIRE = 1 -->
+
+                        <option value="1">
+
+                            Fire
+
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+                <!-- ===============================
+                     REGION
+                =============================== -->
+
+                <div class="input-group-custom">
+
+
+                    <label
+                        for="Region"
+                        class="form-label"
+                    >
+
+                        Region
+
+                    </label>
+
+
+                    <select
+                        class="form-control"
+                        id="Region"
+                        name="Region"
+                        required
+                    >
+
+
+                        <option
+                            value=""
+                            disabled
+                            selected
+                        >
+
+                            Select region
+
+                        </option>
+
+
+                        <!-- BEJAIA = 0 -->
+
+                        <option value="0">
+
+                            Bejaia
+
+                        </option>
+
+
+                        <!-- SIDI-BEL ABBES = 1 -->
+
+                        <option value="1">
+
+                            Sidi-Bel Abbes
+
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PREDICT BUTTON
+            ================================================= -->
+
+            <button
+                type="submit"
+                class="predict-btn"
+            >
+
+                🔥 &nbsp;
+                Predict Fire Weather Index
+
+            </button>
+
+
+        </form>
+
+
+
+        <!-- =================================================
+             RESULT
+        ================================================= -->
+
+        {% if result is not none %}
+
+
+        <div class="result">
+
+
+            <div class="result-label">
+
+                Prediction Result
+
+            </div>
+
+
+            <h3>
+
+                {{ result }}
+
+            </h3>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+    FWI Prediction System
+    •
+    Machine Learning Based Forest Fire Analysis
+
+</div>
+```
+
+</div>
+
+</body>
+
+</html>
